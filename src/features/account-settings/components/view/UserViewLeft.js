@@ -1,4 +1,5 @@
 // ** React Imports
+import { useState } from 'react';
 
 // ** MUI Imports
 import Box from '@mui/material/Box';
@@ -9,22 +10,13 @@ import CardContent from '@mui/material/CardContent';
 import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
-import { useState } from 'react';
+import Avatar from '@mui/material/Avatar';
+import Chip from '@mui/material/Chip';
 
 // ** Custom Components
-import CustomAvatar from 'components/mui/avatar';
-import CustomChip from 'components/mui/chip';
-
-// ** Utils Import
-import { getInitials } from 'utils/get-initials';
-
-// import { getUserById } from '../services/viewUserServices';
-
 import UserEditDialog from '../UserEditDialog';
 import { getImageUrl } from 'utils/imageUtils';
 import { profilePlaceholder } from 'utils/placeholders';
-
-// import { MenuItem, TextField } from '@mui/material';
 
 const UserViewLeft = ({ userData, id, setRefetch }) => {
   const statusColors = {
@@ -41,71 +33,82 @@ const UserViewLeft = ({ userData, id, setRefetch }) => {
   const handleEditClose = () => setOpenEdit(false);
 
   return (
-    <Grid container spacing={3}>
-      <Grid item xs={12}>
-        <Card>
-          <CardContent sx={{ pt: 8, display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
-              <CustomAvatar
-                src={ userData?.image ? getImageUrl(userData?.image) : profilePlaceholder}
-                variant="rounded"
-                alt={userData?.name}
-                sx={{ width: 100, height: 100, mb: 4 }}
-              />
-            <Typography variant="h4" sx={{ mb: 2 }}>
-              {userData?.first_name + userData?.last_name}
+    <Grid container spacing={3} justifyContent="center">
+      <Grid item xs={12} >
+        <Card sx={{ boxShadow: 3, borderRadius: 2 }}>
+          <CardContent
+            sx={{
+              pt: 4,
+              display: 'flex',
+              alignItems: 'center',
+              flexDirection: 'column',
+              backgroundColor: 'primary.light',
+              color: 'primary.contrastText'
+            }}
+          >
+            <Avatar
+              src={userData?.image ? getImageUrl(userData.image) : profilePlaceholder}
+              alt={userData?.name}
+              sx={{ width: 120, height: 120, mb: 3, border: '4px solid', borderColor: 'primary.main' }}
+            />
+            <Typography variant="h5" sx={{ fontWeight: 'bold', mb: 1 }}>
+              {`${userData?.first_name || ''} ${userData?.last_name || ''}`}
             </Typography>
-            <CustomChip
-              rounded
-              skin="light"
-              size="small"
-              label={userData?.role?.identity}
-              color={'warning'}
-              sx={{ textTransform: 'capitalize' }}
+            <Chip
+              label={userData?.role?.identity || 'User'}
+              color="warning"
+              sx={{ textTransform: 'capitalize', fontWeight: 'bold' }}
             />
           </CardContent>
 
-          <Divider sx={{ my: '0 !important', mx: 6 }} />
+          <Divider />
 
-          <CardContent sx={{ pb: 1 }}>
-            <Typography variant="body2" sx={{ color: 'text.disabled', textTransform: 'uppercase' }}>
-              Details
+          <CardContent>
+            <Typography variant="subtitle2" color="text.secondary" sx={{ mb: 3, textTransform: 'uppercase', fontWeight: 500 }}>
+              User Details
             </Typography>
-            <Box sx={{ pt: 4 }}>
-              <Box sx={{ display: 'flex', mb: 3 }}>
-                <Typography sx={{ mr: 2, fontWeight: 500, color: 'text.secondary' }}>name:</Typography>
-                <Typography sx={{ color: 'text.secondary' }}>{userData?.first_name + userData?.last_name}</Typography>
+            <Box sx={{ display: 'grid', rowGap: 1 }}>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                <Typography color="text.primary" fontWeight={500}>
+                  Name:
+                </Typography>
+                <Typography>{`${userData?.first_name || ''} ${userData?.last_name || ''}`}</Typography>
               </Box>
-              <Box sx={{ display: 'flex', mb: 3 }}>
-                <Typography sx={{ mr: 2, fontWeight: 500, color: 'text.secondary' }}>Email:</Typography>
-                <Typography sx={{ color: 'text.secondary' }}>{userData?.email}</Typography>
+
+              <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                <Typography color="text.primary" fontWeight={500}>
+                  Email:
+                </Typography>
+                <Typography>{userData?.email || 'N/A'}</Typography>
               </Box>
-              <Box sx={{ display: 'none', mb: 3 }}>
-                <Typography sx={{ mr: 2, fontWeight: 500, color: 'text.secondary' }}>Designation:</Typography>
-                <Typography sx={{ color: 'text.secondary' }}>{userData?.institution_users?.designation}</Typography>
-              </Box>
-              <Box sx={{ display: 'flex', mb: 3, alignItems: 'center' }}>
-                <Typography sx={{ mr: 2, fontWeight: 500, color: 'text.secondary' }}>Status:</Typography>
-                <CustomChip
-                  rounded
-                  skin="light"
+
+              <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                <Typography color="text.primary" fontWeight={500}>
+                  Status:
+                </Typography>
+                <Chip
+                  label={userData?.is_active ? 'Active' : 'Inactive'}
+                  color={statusColors[userData?.is_active] || 'default'}
                   size="small"
-                  label={userData.is_active ? 'Active' : 'InActive'}
-                  color={statusColors[userData.is_active]}
-                  sx={{
-                    textTransform: 'capitalize'
-                  }}
                 />
               </Box>
 
-              <Box sx={{ display: 'flex' }}>
-                <Typography sx={{ mr: 2, fontWeight: 500, color: 'text.secondary' }}>Contact:</Typography>
-                <Typography sx={{ color: 'text.secondary' }}>{userData?.phone_number}</Typography>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                <Typography color="text.primary" fontWeight={500}>
+                  Contact:
+                </Typography>
+                <Typography>{userData?.phone_number || 'N/A'}</Typography>
               </Box>
             </Box>
           </CardContent>
 
-          <CardActions sx={{ display: 'flex', justifyContent: 'center' }}>
-            <Button variant="contained" sx={{ mr: 2 }} onClick={handleEditClickOpen}>
+          <CardActions sx={{ display: 'flex', justifyContent: 'center', p: 2 }}>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleEditClickOpen}
+              sx={{ px: 4, py: 1, textTransform: 'none' ,borderRadius: '50px' }}
+            >
               Edit Details
             </Button>
           </CardActions>

@@ -98,7 +98,7 @@ const AllNotifications = () => {
                 padding: 2,
                 borderRadius: 2,
                 boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.1)',
-                backgroundColor: item.status === 'unread' ? '#f5f5f5' : '#ffffff',
+                backgroundColor: item.status === 'unread' ? '#0cce7f' : '#ffffff',
                 cursor: 'pointer',
                 transition: 'transform 0.2s, box-shadow 0.2s',
                 '&:hover': {
